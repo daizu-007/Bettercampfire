@@ -1,5 +1,7 @@
 package com.daizuch.better_campfire.Block;
 
+import com.daizuch.better_campfire.ItemRegister;
+import com.daizuch.better_campfire.TileEntity.KindlingBlockTileEntity;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -8,8 +10,12 @@ import net.minecraft.block.material.PushReaction;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.pathfinding.PathNodeType;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
@@ -18,29 +24,61 @@ import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 
 public class KindlingBlock extends Block {
+    //焚付の形状を設定
     private static final VoxelShape SHAPE = Block.makeCuboidShape(5, 0, 5, 11, 5, 11);
+
+    //親クラスのBlockコンストラクタを呼び出す
     public KindlingBlock(Properties properties) {
         super(properties);
     }
-    public VoxelShape getShape(BlockState p_220053_1_, IBlockReader p_220053_2_, BlockPos p_220053_3_, ISelectionContext p_220053_4_) {
+
+    //焚付の形状を適用
+    public VoxelShape getShape(BlockState state, IBlockReader blockReader, BlockPos pos, ISelectionContext context) {
         return SHAPE;
     }
+
+    //mobが通れるようにする
     @Override
     public PathNodeType getAiPathNodeType(BlockState state, IBlockReader world, BlockPos pos, MobEntity entity) {
         return PathNodeType.OPEN;
     }
 
+    //ピストンで押されたら破壊する
     @Override
     public PushReaction getPushReaction(BlockState state) {
         return PushReaction.DESTROY;
     }
+
+    //TileEntityを持つことを示す
     @Override
-    public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
-        if(!worldIn.isRemote()) {
-            replaceBlock(state,Blocks.CAMPFIRE.getDefaultState(),worldIn,pos,0);
-            return ActionResultType.SUCCESS;
+    public boolean hasTileEntity(BlockState state) {
+        return true; // TileEntityを持つことを示す
+    }
+
+    //TileEntityの作成
+    @Override
+    public TileEntity createTileEntity(BlockState state, IBlockReader world) {
+        return new KindlingBlockTileEntity(); // 新しいTileEntityのインスタンスを作成して返す
+    }
+
+    //右クリックされたときの処理
+    @Override
+    public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult result) {
+        //手に持っているアイテムを取得
+        ItemStack itemStack = player.getHeldItem(hand);
+        //もし着火具なら
+        if (itemStack.getItem() == Items.FLINT_AND_STEEL) {
+            //TileEntityを取得
+            TileEntity tileEntity = world.getTileEntity(pos);
+            //TileEntityがあれば
+            if (tileEntity instanceof KindlingBlockTileEntity){
+                //着火処理を実行
+                ((KindlingBlockTileEntity) tileEntity).ignite();
+                return ActionResultType.SUCCESS;
+            }
         }
         return ActionResultType.PASS;
     }

@@ -1,13 +1,16 @@
 package com.daizuch.better_campfire;
 
+import com.daizuch.better_campfire.Block.AshBlock;
 import com.daizuch.better_campfire.Block.KindlingBlock;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
+import net.minecraftforge.common.ToolType;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
@@ -19,7 +22,9 @@ public class ItemRegister {
     private static final DeferredRegister<Block> BLOCKS= DeferredRegister.create(ForgeRegistries.BLOCKS, BetterCampfire.MOD_ID);
     //ここから下でブロックを追加
     //焚付
-    public static final RegistryObject<Block> KINDLING= BLOCKS.register("kindling", () -> {return new KindlingBlock(AbstractBlock.Properties.create(Material.WOOD).harvestLevel(0).hardnessAndResistance(1f).notSolid());});
+    public static final RegistryObject<Block> KINDLING= BLOCKS.register("kindling", () -> {return new KindlingBlock(AbstractBlock.Properties.create(Material.WOOD).doesNotBlockMovement().zeroHardnessAndResistance().notSolid().tickRandomly());});
+    //灰
+    public static final RegistryObject<Block> ASH= BLOCKS.register("ash", () -> {return new AshBlock(AbstractBlock.Properties.create(Material.MISCELLANEOUS).notSolid().harvestLevel(0).harvestTool(ToolType.SHOVEL).sound(SoundType.SAND));});
 
     //ここから下でアイテムを追加
     //薪

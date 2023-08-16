@@ -17,11 +17,11 @@ public class BetterCampfire {
     public static final String MOD_ID = "better_campfire";
 
     public BetterCampfire() {
-        //EventBus(?)の登録
+        //EventBusの登録
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
         //アイテムの登録
         ItemRegister.register(modEventBus);
-        //必須
+        //必須 ここまでのEventBusを登録
         MinecraftForge.EVENT_BUS.register(this);
     }
 }
