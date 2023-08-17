@@ -14,10 +14,13 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.shapes.ISelectionContext;
@@ -25,6 +28,10 @@ import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+
+import java.util.Random;
 
 public class KindlingBlock extends Block {
     //焚付の形状を設定
@@ -77,9 +84,17 @@ public class KindlingBlock extends Block {
             if (tileEntity instanceof KindlingBlockTileEntity){
                 //着火処理を実行
                 ((KindlingBlockTileEntity) tileEntity).ignite();
+                world.playSound(null, pos, SoundEvents.ITEM_FLINTANDSTEEL_USE, SoundCategory.BLOCKS, 1.0F, 1.0F);
                 return ActionResultType.SUCCESS;
             }
         }
         return ActionResultType.PASS;
+    }
+    //灰に置き換える
+    public static void replace_to_ash (World world, BlockPos pos) {
+        //灰のブロックを作成
+        BlockState ash = ItemRegister.ASH.get().getDefaultState();
+        //灰のブロックに置き換える
+        world.setBlockState(pos, ash);
     }
 }
