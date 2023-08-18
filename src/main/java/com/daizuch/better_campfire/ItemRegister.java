@@ -25,12 +25,16 @@ public class ItemRegister {
     public static final RegistryObject<Block> KINDLING= BLOCKS.register("kindling", () -> {return new KindlingBlock(AbstractBlock.Properties.create(Material.WOOD).doesNotBlockMovement().zeroHardnessAndResistance().notSolid().tickRandomly());});
     //灰
     public static final RegistryObject<Block> ASH= BLOCKS.register("ash", () -> {return new AshBlock(AbstractBlock.Properties.create(Material.MISCELLANEOUS).notSolid().harvestLevel(0).harvestTool(ToolType.SHOVEL).sound(SoundType.SAND));});
+    //薪
+    public static final RegistryObject<Block> FIRE_WOOD= BLOCKS.register("fire_wood", () -> {return new Block(AbstractBlock.Properties.create(Material.WOOD).notSolid().harvestTool(ToolType.AXE).harvestLevel(0));});
 
     //ここから下でアイテムを追加
     //薪
-    public static final RegistryObject<Item> FIRE_WOOD= ITEMS.register("fire_wood", () -> {return new Item((new net.minecraft.item.Item.Properties()).group(TabBetterCampfire.BetterCampfireMod));});
+    public static final RegistryObject<Item> FIRE_WOOD_ITEM= ITEMS.register("fire_wood", () -> {return new BlockItem(FIRE_WOOD.get(),new Item.Properties().group(TabBetterCampfire.BetterCampfireMod));});
     //焚付
     public static final RegistryObject<Item> KINDLING_ITEM= ITEMS.register("kindling", () -> {return new BlockItem(KINDLING.get(),new Item.Properties().group(TabBetterCampfire.BetterCampfireMod));});
+    //木炭の欠片
+    public static final RegistryObject<Item> PIECE_OF_CHARCOAL= ITEMS.register("piece_of_charcoal", () -> {return new Item((new Item.Properties()).group(TabBetterCampfire.BetterCampfireMod));});
 
 
     //アイテムとブロックの追加
