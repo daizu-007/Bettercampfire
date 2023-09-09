@@ -19,8 +19,6 @@ public class BetterCampfire {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
         //アイテムの登録
         ItemRegister.register(modEventBus);
-        //TileEntityの登録
-        TileEntitiesRegister.register(modEventBus);
         //必須 ここまでのEventBusを登録
         MinecraftForge.EVENT_BUS.register(this);
     }

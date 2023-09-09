@@ -13,16 +13,19 @@ import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.state.IntegerProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.IBlockReader;
+import net.minecraft.world.IWorld;
+import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 
 public class FireWoodBlock extends Block {
-    //このクラスではキャンプファイアーの組み立ての土台となるファイアーピット（木炭を並べたもの）を定義する
+    //このクラスではキャンプファイアーの組み立ての土台となる薪（を並べたもの）を定義する
 
     //薪の数を表す変数
     public static final IntegerProperty CHARGES = IntegerProperty.create("charges", 1, 4);
@@ -39,13 +42,23 @@ public class FireWoodBlock extends Block {
         this.setDefaultState(this.stateContainer.getBaseState().with(FireWoodBlock.CHARGES, Integer.valueOf(1)));
     }
 
-    //ファイアーピットの形状を設定
+    //薪の形状を設定
     //makeCuboidShapeメソッドは、引数に与えられた座標を頂点とする立方体の形状を作成する
     private static final VoxelShape SHAPE = Block.makeCuboidShape(0, 0, 1, 16, 8, 15);
 
-    //ファイアーピットの形状を適用
+    //薪の形状を適用
     public VoxelShape getShape(BlockState state, IBlockReader blockReader, BlockPos pos, ISelectionContext context) {
         return SHAPE;
+    }
+
+    //薪の下にブロックがないなら破壊
+    public BlockState updatePostPlacement(BlockState stateIn, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos) {
+        return facing == Direction.DOWN && !this.isValidPosition(stateIn, worldIn, currentPos) ? Blocks.AIR.getDefaultState() : super.updatePostPlacement(stateIn, facing, facingState, worldIn, currentPos, facingPos);
+    }
+
+    //薪の設置条件を設定
+    public boolean isValidPosition(BlockState state, IWorldReader worldIn, BlockPos pos) {
+        return hasEnoughSolidSide(worldIn, pos.down(), Direction.UP);
     }
 
     //mobが通れるようにする
