@@ -1,21 +1,15 @@
 package com.daizuch.better_campfire.Block;
 
-import com.daizuch.better_campfire.ItemRegister;
-import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.material.PushReaction;
+import net.minecraft.block.Blocks;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.state.IntegerProperty;
-import net.minecraft.state.properties.BlockStateProperties;
+import net.minecraft.state.StateContainer;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.shapes.ISelectionContext;
@@ -24,15 +18,27 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 
 public class FireWoodBlock extends Block {
-    //焚付の形状を設定
-    private static final VoxelShape SHAPE = Block.makeCuboidShape(11, 0, 0, 15, 4, 16);
+    //このクラスではキャンプファイアーの組み立ての土台となるファイアーピット（木炭を並べたもの）を定義する
 
-    //親クラスのBlockコンストラクタを呼び出す
-    public FireWoodBlock(Properties properties) {
-        super(properties);
+    //薪の数を表す変数
+    public static final IntegerProperty CHARGES = IntegerProperty.create("charges", 1, 4);
+
+    //block stateを設定
+    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
+        builder.add(CHARGES);
     }
 
-    //焚付の形状を適用
+    //親クラスのBlockコンストラクタを呼び出す。コンストラクタとはクラスをオブジェクト化するためのメソッド
+    public FireWoodBlock(Properties properties) {
+        super(properties);
+        this.setDefaultState(this.stateContainer.getBaseState().with(FireWoodBlock.CHARGES, Integer.valueOf(1)));
+    }
+
+    //ファイアーピットの形状を設定
+    //makeCuboidShapeメソッドは、引数に与えられた座標を頂点とする立方体の形状を作成する
+    private static final VoxelShape SHAPE = Block.makeCuboidShape(0, 0, 0, 16, 1, 16);
+
+    //ファイアーピットの形状を適用
     public VoxelShape getShape(BlockState state, IBlockReader blockReader, BlockPos pos, ISelectionContext context) {
         return SHAPE;
     }
@@ -42,26 +48,20 @@ public class FireWoodBlock extends Block {
     public PathNodeType getAiPathNodeType(BlockState state, IBlockReader world, BlockPos pos, MobEntity entity) {
         return PathNodeType.OPEN;
     }
-    //右クリックによる組み立て
+
+    //右クリック時の処理
     @Override
     public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult result) {
-        //手に持っているアイテムを取得
-        ItemStack itemStack = player.getHeldItem(hand);
-        //薪の数を取得
-        BlockState blockState = world.getBlockState(pos);
-        //手に持っているアイテムが薪なら
-        if (itemStack.getItem() == ItemRegister.FIRE_WOOD_ITEM.get()) {
-            //薪の数が3つ以下なら
-            if (blockState.get(BlockStateProperties.CHARGES) < 3) {
-                //薪を1つ減らす
-                itemStack.shrink(1);
-                //薪を1つ追加する
-                world.setBlockState(pos, state.with(BlockStateProperties.CHARGES, blockState.get(BlockStateProperties.CHARGES) + 1));
-                //音を鳴らす
-                world.playSound(player, pos, SoundEvents.BLOCK_WOOD_PLACE, SoundCategory.BLOCKS, 1.0F, 1.0F);
-                //成功を返す
-                return ActionResultType.SUCCESS;
-            }
+        Integer charges = state.get(FireWoodBlock.CHARGES);
+        if (charges < 4) {
+            //薪をひとつ増やす
+            world.setBlockState(pos, state.with(FireWoodBlock.CHARGES, Integer.valueOf(state.get(FireWoodBlock.CHARGES) + 1)));
+            //薪をひとつ増やしたので終了
+            return ActionResultType.SUCCESS;
+        }
+        else {
+            //キャンプファイヤーに置き換える
+            world.setBlockState(pos, Blocks.CAMPFIRE.getBlock().getDefaultState());
         }
         return ActionResultType.PASS;
     }

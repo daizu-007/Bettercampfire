@@ -1,15 +1,14 @@
 package com.daizuch.better_campfire;
 
 import com.daizuch.better_campfire.Block.AshBlock;
+import com.daizuch.better_campfire.Block.FireWoodBlock;
 import com.daizuch.better_campfire.Block.KindlingBlock;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
 import net.minecraftforge.common.ToolType;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.RegistryObject;
@@ -26,7 +25,7 @@ public class ItemRegister {
     //灰
     public static final RegistryObject<Block> ASH= BLOCKS.register("ash", () -> {return new AshBlock(AbstractBlock.Properties.create(Material.MISCELLANEOUS).notSolid().harvestLevel(0).harvestTool(ToolType.SHOVEL).sound(SoundType.SAND));});
     //薪
-    public static final RegistryObject<Block> FIRE_WOOD= BLOCKS.register("fire_wood", () -> {return new Block(AbstractBlock.Properties.create(Material.WOOD).notSolid().harvestTool(ToolType.AXE).harvestLevel(0));});
+    public static final RegistryObject<Block> FIRE_WOOD= BLOCKS.register("fire_wood", () -> {return new FireWoodBlock(AbstractBlock.Properties.create(Material.WOOD).notSolid().harvestTool(ToolType.AXE).harvestLevel(0).sound(SoundType.WOOD));});
 
     //ここから下でアイテムを追加
     //薪

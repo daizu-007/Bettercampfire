@@ -1,16 +1,16 @@
 {
   "variants": {
-    "charge=1": {
-      "model": "better_campfire:block/fire_wood_x1"
+    "charges=1": {
+      "model": "better_campfire:block/campfire_1"
     },
-    "charge=2": {
-      "model": "better_campfire/fire_wood_x2"
+    "charges=2": {
+      "model": "better_campfire/campfire_2"
     },
-    "charge=3": {
-      "model": "better_campfire/fire_wood_x3"
+    "charges=3": {
+      "model": "better_campfire/campfire_3"
     },
-    "charge=4": {
-      "model": "better_campfire/fire_wood_x4"
+    "charges=4": {
+      "model": "better_campfire/campfire_4"
     }
   }
 }
