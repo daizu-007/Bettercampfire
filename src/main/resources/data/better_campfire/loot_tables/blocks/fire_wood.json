@@ -1,0 +1,69 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "better_campfire:fire_wood",
+          "conditions": [
+            {
+              "condition": "minecraft:block_state_property",
+              "block": "better_campfire:fire_wood",
+              "properties": {"charges": 1}
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "rolls": 2,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "better_campfire:fire_wood",
+          "conditions": [
+            {
+              "condition": "minecraft:block_state_property",
+              "block": "better_campfire:fire_wood",
+              "properties": {"charges": 2}
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "rolls": 3,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "better_campfire:fire_wood",
+          "conditions": [
+            {
+              "condition": "minecraft:block_state_property",
+              "block": "better_campfire:fire_wood",
+              "properties": {"charges": 3}
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "rolls": 4,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "better_campfire:fire_wood",
+          "conditions": [
+            {
+              "condition": "minecraft:block_state_property",
+              "block": "better_campfire:fire_wood",
+              "properties": {"charges": 4}
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

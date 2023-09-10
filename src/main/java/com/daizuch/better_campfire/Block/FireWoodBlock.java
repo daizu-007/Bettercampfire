@@ -1,10 +1,9 @@
 package com.daizuch.better_campfire.Block;
 
 import com.daizuch.better_campfire.ItemRegister;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.CampfireBlock;
+import com.mojang.datafixers.types.templates.Tag;
+import net.minecraft.block.*;
+import net.minecraft.client.audio.Sound;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -12,9 +11,7 @@ import net.minecraft.item.Items;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.state.IntegerProperty;
 import net.minecraft.state.StateContainer;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.shapes.ISelectionContext;
@@ -23,6 +20,7 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
+import net.minecraftforge.common.Tags;
 
 public class FireWoodBlock extends Block {
     //このクラスではキャンプファイアーの組み立ての土台となる薪（を並べたもの）を定義する
@@ -44,7 +42,7 @@ public class FireWoodBlock extends Block {
 
     //薪の形状を設定
     //makeCuboidShapeメソッドは、引数に与えられた座標を頂点とする立方体の形状を作成する
-    private static final VoxelShape SHAPE = Block.makeCuboidShape(0, 0, 1, 16, 8, 15);
+    private static final VoxelShape SHAPE = Block.makeCuboidShape(0, 0, 0, 16, 7, 16);
 
     //薪の形状を適用
     public VoxelShape getShape(BlockState state, IBlockReader blockReader, BlockPos pos, ISelectionContext context) {
@@ -71,39 +69,42 @@ public class FireWoodBlock extends Block {
     @Override
     public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult result) {
         Integer charges = state.get(FireWoodBlock.CHARGES);
+        LOGGER.info(ItemRegister.FIRE_WOOD_ITEM.get().getTranslationKey());
         //手に持っているアイテムを取得
         ItemStack itemstack = player.getHeldItem(hand);
-        //もし手に持っているアイテムが薪か木炭なら
-        if (itemstack.getItem() == ItemRegister.FIRE_WOOD_ITEM.get() || itemstack.getItem() == Items.CHARCOAL) {
+        //もし手に持っているアイテムが薪なら
+        if (itemstack.getItem() == ItemRegister.FIRE_WOOD_ITEM.get()){
             if (charges != 4) {
                 //薪をひとつ増やす
                 world.setBlockState(pos, state.with(FireWoodBlock.CHARGES, Integer.valueOf(state.get(FireWoodBlock.CHARGES) + 1)));
+                world.playSound(player, pos, SoundType.WOOD.getPlaceSound(), SoundCategory.BLOCKS, 1.0F, 1.0F);
                 //もしクリエイティブモードでないなら
                 if (!player.abilities.isCreativeMode) {
                     //手に持っているアイテムをひとつ減らす
                     itemstack.shrink(1);
                 }
                 //薪をひとつ増やしたので終了
-                LOGGER.info("charges: " + charges);
+                //LOGGER.info("charges: " + charges);
                 return ActionResultType.SUCCESS;
-            } else {
-                LOGGER.info("charges is not 4");
-                //もし手に持っているアイテムが木炭なら
-                if (itemstack.getItem() == Items.CHARCOAL){
-                    LOGGER.info("item is charcoal");
-                    //消灯したキャンプファイヤーに置き換える
-                    world.setBlockState(pos, Blocks.CAMPFIRE.getBlock().getDefaultState().with(CampfireBlock.LIT, Boolean.valueOf(false)));
-                    //もしクリエイティブモードでないなら
-                    if (!player.abilities.isCreativeMode) {
-                        //手に持っているアイテムをひとつ減らす
-                        itemstack.shrink(1);
-                    }
-                    return ActionResultType.SUCCESS;
-                }
-                return ActionResultType.PASS;
             }
-        }else {
             return ActionResultType.PASS;
+            //もし手に持っているアイテムが木炭なら
+        } else if (itemstack.getItem().getTags() == Items.CHARCOAL.getTags() || itemstack.getItem().getTags() == Items.COAL.getTags()) {
+            //LOGGER.info("item is charcoal");
+            //もし薪が4つなら
+            if (charges == 4) {
+                //LOGGER.info("item is charcoal");
+                //消灯したキャンプファイヤーに置き換える
+                world.setBlockState(pos, Blocks.CAMPFIRE.getBlock().getDefaultState().with(CampfireBlock.LIT, Boolean.valueOf(false)));
+                world.playSound(player, pos, SoundType.SAND.getPlaceSound(), SoundCategory.BLOCKS, 1.0F, 1.0F);
+                //もしクリエイティブモードでないなら
+                if (!player.abilities.isCreativeMode) {
+                    //手に持っているアイテムをひとつ減らす
+                    itemstack.shrink(1);
+                }
+                return ActionResultType.SUCCESS;
+            }
         }
+        return ActionResultType.PASS;
     }
 }

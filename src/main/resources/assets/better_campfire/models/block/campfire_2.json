@@ -2,7 +2,7 @@
 	"credit": "Made with Blockbench",
 	"parent": "block/block",
 	"textures": {
-		"particle": "minecraft:block/campfire_log",
+		"particle": "minecraft:block/oak_log",
 		"log": "minecraft:block/campfire_log"
 	},
 	"elements": [

@@ -1,0 +1,11 @@
+{
+  "type": "primutils:chopping",
+  "chopAmounts": 2,
+  "input": {
+    "tag": "minecraft:logs"
+  },
+  "output": {
+    "item": "better_campfire:fire_wood",
+    "count": 4
+  }
+}
