@@ -9,7 +9,11 @@ No more unrealistic crafting on workbenches!
 もう非現実的な作業台での作成はありません！！  
   
 ## Demo  
-[![BetterCampfireMod-demo](http://img.youtube.com/vi/60UZL2c4jys/0.jpg)](https://www.youtube.com/watch?v=60UZL2c4jys)  
+
+
+https://github.com/daizu-007/Bettercampfire/assets/128668088/8ce3acc4-3668-4fa4-b5ed-a30e64fb7845
+
+
 ## Permission  
   
 You are free to use this mod in your modpack.   
