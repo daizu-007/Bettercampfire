@@ -51,7 +51,7 @@ Thank you from the bottom of my heart!
 [@toliner](https://github.com/toliner)  
   
 ## Miscellaneous
-
+  
 If you find any bugs with this mod or have any awesome ideas, feel free to drop a comment or create an issue on GitHub. Don't hold back, we're all ears!
 Please forgive my lousy English. I'm Japanese, and my English is being translated by ChatGPT. Don't mind my clumsy language skills!
 
