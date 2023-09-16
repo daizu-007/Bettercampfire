@@ -103,6 +103,21 @@ public class FireWoodBlock extends Block {
                     itemstack.shrink(1);
                 }
                 return ActionResultType.SUCCESS;
+            }//もし手に持っているアイテムがソウルサンドなら
+        } else if (itemstack.getItem() == Items.SOUL_SAND) {
+            //LOGGER.info("item is soul sand");
+            //もし薪が4つなら
+            if (charges == 4) {
+                //LOGGER.info("item is soul sand");
+                //消灯したソウルキャンプファイヤーに置き換える
+                world.setBlockState(pos, Blocks.SOUL_CAMPFIRE.getBlock().getDefaultState().with(CampfireBlock.LIT, Boolean.valueOf(false)));
+                world.playSound(player, pos, SoundType.SAND.getPlaceSound(), SoundCategory.BLOCKS, 1.0F, 1.0F);
+                //もしクリエイティブモードでないなら
+                if (!player.abilities.isCreativeMode) {
+                    //手に持っているアイテムをひとつ減らす
+                    itemstack.shrink(1);
+                }
+                return ActionResultType.SUCCESS;
             }
         }
         return ActionResultType.PASS;
