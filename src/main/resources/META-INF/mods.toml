@@ -6,7 +6,7 @@ license="MIT"
 modId="better_campfire"
 version="${file.jarVersion}"
 displayName="Better campfire"
-authors="daizuch"
+authors="daizu007"
 description='''
 More realistic setup for a campfire.  
 '''
