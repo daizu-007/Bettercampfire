@@ -6,9 +6,11 @@ import net.minecraft.block.*;
 import net.minecraft.client.audio.Sound;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.pathfinding.PathNodeType;
+import net.minecraft.state.DirectionProperty;
 import net.minecraft.state.IntegerProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.util.*;
@@ -27,17 +29,20 @@ public class FireWoodBlock extends Block {
 
     //薪の数を表す変数
     public static final IntegerProperty CHARGES = IntegerProperty.create("charges", 1, 4);
+    //薪の向きを表す変数
+    public static final DirectionProperty FACING = HorizontalBlock.HORIZONTAL_FACING;
+
 
     @Override
     //block stateを設定
     protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
-        builder.add(CHARGES);
+        builder.add(CHARGES, FACING);
     }
 
     //親クラスのBlockコンストラクタを呼び出す。コンストラクタとはクラスをオブジェクト化するためのメソッド
     public FireWoodBlock(Properties properties) {
         super(properties);
-        this.setDefaultState(this.stateContainer.getBaseState().with(FireWoodBlock.CHARGES, Integer.valueOf(1)));
+        this.setDefaultState(this.stateContainer.getBaseState().with(FireWoodBlock.CHARGES, Integer.valueOf(1)).with(FACING, Direction.NORTH));
     }
 
     //薪の形状を設定
@@ -47,6 +52,11 @@ public class FireWoodBlock extends Block {
     //薪の形状を適用
     public VoxelShape getShape(BlockState state, IBlockReader blockReader, BlockPos pos, ISelectionContext context) {
         return SHAPE;
+    }
+
+    //設置時にプレイヤーの向きに置く
+    public BlockState getStateForPlacement(BlockItemUseContext context) {
+        return this.getDefaultState().with(FACING, context.getPlacementHorizontalFacing().getOpposite());
     }
 
     //薪の下にブロックがないなら破壊
@@ -95,7 +105,7 @@ public class FireWoodBlock extends Block {
             if (charges == 4) {
                 //LOGGER.info("item is charcoal");
                 //消灯したキャンプファイヤーに置き換える
-                world.setBlockState(pos, Blocks.CAMPFIRE.getBlock().getDefaultState().with(CampfireBlock.LIT, Boolean.valueOf(false)));
+                world.setBlockState(pos, Blocks.CAMPFIRE.getBlock().getDefaultState().with(CampfireBlock.LIT, Boolean.valueOf(false)).with(CampfireBlock.FACING, state.get(FACING)));
                 world.playSound(player, pos, SoundType.SAND.getPlaceSound(), SoundCategory.BLOCKS, 1.0F, 1.0F);
                 //もしクリエイティブモードでないなら
                 if (!player.abilities.isCreativeMode) {
@@ -110,7 +120,7 @@ public class FireWoodBlock extends Block {
             if (charges == 4) {
                 //LOGGER.info("item is soul sand");
                 //消灯したソウルキャンプファイヤーに置き換える
-                world.setBlockState(pos, Blocks.SOUL_CAMPFIRE.getBlock().getDefaultState().with(CampfireBlock.LIT, Boolean.valueOf(false)));
+                world.setBlockState(pos, Blocks.SOUL_CAMPFIRE.getBlock().getDefaultState().with(CampfireBlock.LIT, Boolean.valueOf(false)).with(CampfireBlock.FACING, state.get(FACING)));
                 world.playSound(player, pos, SoundType.SAND.getPlaceSound(), SoundCategory.BLOCKS, 1.0F, 1.0F);
                 //もしクリエイティブモードでないなら
                 if (!player.abilities.isCreativeMode) {

@@ -1,15 +1,63 @@
 {
   "variants": {
-    "charges=1": {
+    "facing=north,charges=1": {
       "model": "better_campfire:block/campfire_1"
     },
-    "charges=2": {
+    "facing=north,charges=2": {
       "model": "better_campfire:block/campfire_2"
     },
-    "charges=3": {
+    "facing=north,charges=3": {
       "model": "better_campfire:block/campfire_3"
     },
-    "charges=4": {
+    "facing=north,charges=4": {
+      "model": "better_campfire:block/campfire_4"
+    },
+    "facing=east,charges=1": {
+      "y": 90,
+      "model": "better_campfire:block/campfire_1"
+    },
+    "facing=east,charges=2": {
+      "y": 90,
+      "model": "better_campfire:block/campfire_2"
+    },
+    "facing=east,charges=3": {
+      "y": 90,
+      "model": "better_campfire:block/campfire_3"
+    },
+    "facing=east,charges=4": {
+      "y": 90,
+      "model": "better_campfire:block/campfire_4"
+    },
+    "facing=south,charges=1": {
+      "y": 180,
+      "model": "better_campfire:block/campfire_1"
+    },
+    "facing=south,charges=2": {
+      "y": 180,
+      "model": "better_campfire:block/campfire_2"
+    },
+    "facing=south,charges=3": {
+      "y": 180,
+      "model": "better_campfire:block/campfire_3"
+    },
+    "facing=south,charges=4": {
+      "y": 180,
+      "model": "better_campfire:block/campfire_4"
+    },
+    "facing=west,charges=1": {
+      "y": 270,
+      "model": "better_campfire:block/campfire_1"
+    },
+    "facing=west,charges=2": {
+      "y": 270,
+      "model": "better_campfire:block/campfire_2"
+    },
+    "facing=west,charges=3": {
+      "y": 270,
+      "model": "better_campfire:block/campfire_3"
+    },
+    "facing=west,charges=4": {
+      "y": 270,
       "model": "better_campfire:block/campfire_4"
     }
   }
